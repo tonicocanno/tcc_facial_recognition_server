@@ -1,0 +1,7 @@
+pandas
+numpy
+pybase64
+opencv-python
+tensorflow==2.14.0
+Pillow
+flask
