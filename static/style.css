@@ -3,11 +3,19 @@
 }
 
 h3 {
+    display: none;
     color: white;
     border: 1px solid #ffffff4f;
     padding: 1rem 10rem;
     border-radius: 10px;
     background-color: #232527;
+    animation: fadeIn 250ms;
+}
+
+video,
+#image-emotion {
+    display: none;
+    animation: fadeIn 1s;
 }
 
 #canvas-emotion {
@@ -25,26 +33,24 @@ body {
     background-color: #191b1c;
 }
 
-table {
-    font-family: Arial, sans-serif;
-    border-collapse: collapse;
+.progress-bar-container {
+    display: none;
+    opacity: 0;
+    transition: 150ms;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    animation: fadeIn 1s;
+}
+
+.wrapper {
+    position: relative;
+}
+
+.progress-bar-percentage {
+    position: absolute;
+    text-align: center;
     width: 100%;
-}
-
-th,
-td {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
-}
-
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-th {
-    background-color: #4CAF50;
-    color: white;
 }
 
 #showVideo {
@@ -82,16 +88,30 @@ button:hover {
 
 .progress-bar {
     width: 100%;
-    background-color: #e0e0e0;
+    background-color: #1f2122;
     padding: 3px;
     border-radius: 3px;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, .2);
+    color: white;
+    border: 1px solid #343739;
 }
 
 .progress-bar-fill {
     display: block;
     height: 22px;
-    background-color: #659cef;
+    width: 0%;
+    background-color: #5a5a5a;
     border-radius: 3px;
     transition: width 500ms ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        /* Inicia com opacidade zero (invisível) */
+    }
+    100% {
+        opacity: 1;
+        /* Termina com opacidade 1 (totalmente visível) */
+    }
 }

@@ -1,3 +1,5 @@
+//#region global configs
+
 'use strict';
 
 // Put variables in global scope to make them available to the browser console.
@@ -5,6 +7,47 @@ const constraints = window.constraints = {
     audio: false,
     video: true
 };
+
+//#endregion
+
+//#region Init functions
+
+async function init(e) {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        handleSuccess(stream);
+        e.target.disabled = true;
+    } catch (e) {
+        handleError(e);
+    }
+}
+
+function initRealTimeVideoComponents() {
+    label.style.display = 'block';
+    label.innerText = 'Carregando...';
+}
+
+function initProgressBar() {
+    const progressBarContainer = document.querySelector('.progress-bar-container');
+    progressBarContainer.style.display = 'block';
+    progressBarContainer.style.opacity = 1;
+}
+
+function initializeCanvasVideo() {
+    let [w, h] = [video.videoWidth, video.videoHeight];
+    canvas.width = w;
+    canvas.height = h;
+    initializeCanvasEmotion(w, h);
+}
+
+function initializeCanvasEmotion(width, height) {
+    canvasEmotion.width = width;
+    canvasEmotion.height = height;
+}
+
+//#endregion
+
+//#region general functions
 
 function handleSuccess(stream) {
     const video = document.querySelector('video');
@@ -35,24 +78,25 @@ function errorMsg(msg, error) {
     }
 }
 
-async function init(e) {
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        handleSuccess(stream);
-        e.target.disabled = true;
-    } catch (e) {
-        handleError(e);
-    }
-}
-
-function getImageBase64() {
+function getImageBase64FromVideo() {
     context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
     let base64ImageData = canvas.toDataURL();
     return base64ImageData.split(',')[1];
 }
 
-function getEmotions() {
-    const image = getImageBase64();
+function getImageBase64FromFile(file, callback) {
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+        const base64String = e.target.result;
+        callback(base64String);
+    };
+
+    return reader.readAsDataURL(file);
+}
+
+function getEmotions(image, repeat = false) {
+    initProgressBar();
 
     const request = new Request("/face", {
         method: "POST",
@@ -71,7 +115,6 @@ function getEmotions() {
             }
         })
         .then((response) => {
-            console.debug(response);
             contextEmotion.reset();
 
             if (response.label) {
@@ -79,6 +122,7 @@ function getEmotions() {
 
                 if (response.faces.length) {
                     contextEmotion.strokeStyle = "#008000";
+                    contextEmotion.lineWidth = 4;
                     const faces = response.faces[0];
 
                     contextEmotion.beginPath();
@@ -87,7 +131,13 @@ function getEmotions() {
                 }
 
                 if (response.preds.length) {
-                    setEmotionsProgressbar(response.preds);
+                    updateProgressBar(response.preds[0], 'Raiva', 'progress-bar-angry');
+                    updateProgressBar(response.preds[1], 'Nojo', 'progress-bar-disgust');
+                    updateProgressBar(response.preds[2], 'Medo', 'progress-bar-fear');
+                    updateProgressBar(response.preds[3], 'Feliz', 'progress-bar-happy');
+                    updateProgressBar(response.preds[4], 'Triste', 'progress-bar-sad');
+                    updateProgressBar(response.preds[5], 'Surpreso', 'progress-bar-surprise');
+                    updateProgressBar(response.preds[6], 'Neutro', 'progress-bar-neutral');
                 }
             } else
                 label.innerText = 'Sem emoção detectada.'
@@ -98,62 +148,58 @@ function getEmotions() {
             label.innerText = 'Ocorreu um erro ao detectar a emoção';
         })
         .then(() => {
-            getEmotions();
+            if (repeat)
+                getEmotions();
         });
 }
 
-function setEmotionsProgressbar(emotions) {
-    const angryPercentage = ((emotions[0] * 100).toFixed(0));
-    const angryProgress = document.getElementById('progress-bar-angry');
-    angryProgress.style.width = `${ (emotions[0] * 100 ).toFixed(0)}%`;
-    angryProgress.innerText = `Raiva - ${ angryPercentage }%`;
-
-    const disgustPercentage = ((emotions[1] * 100).toFixed(0));
-    const disgustProgress = document.getElementById('progress-bar-disgust');
-    disgustProgress.style.width = `${ (emotions[1] * 100 ).toFixed(0)}%`;
-    disgustProgress.innerText = `Nojo - ${ disgustPercentage }%`;
-
-    const fearPercentage = ((emotions[2] * 100).toFixed(0));
-    const fearProgress = document.getElementById('progress-bar-fear');
-    fearProgress.style.width = `${ (emotions[2] * 100 ).toFixed(0)}%`;
-    fearProgress.innerText = `Medo - ${ fearPercentage }%`;
-
-    const happyPercentage = ((emotions[3] * 100).toFixed(0));
-    const happyProgress = document.getElementById('progress-bar-happy');
-    happyProgress.style.width = `${ (emotions[3] * 100 ).toFixed(0)}%`;
-    happyProgress.innerText = `Feliz - ${ happyPercentage }%`;
-
-    const sadPercentage = ((emotions[4] * 100).toFixed(0));
-    const sadProgress = document.getElementById('progress-bar-sad');
-    sadProgress.style.width = `${ (emotions[4] * 100 ).toFixed(0)}%`;
-    sadProgress.innerText = `Triste - ${ sadPercentage }%`;
-
-    const surprisePercentage = ((emotions[5] * 100).toFixed(0));
-    const surpriseProgress = document.getElementById('progress-bar-surprise');
-    surpriseProgress.style.width = `${ (emotions[5] * 100 ).toFixed(0)}%`;
-    surpriseProgress.innerText = `Surpreso - ${ surprisePercentage }%`;
-
-    const neutralPercentage = ((emotions[6] * 100).toFixed(0));
-    const neutralProgress = document.getElementById('progress-bar-neutral');
-    neutralProgress.style.width = `${ (emotions[6] * 100 ).toFixed(0)}%`;
-    neutralProgress.innerText = `Neutro - ${ neutralPercentage }%`;
+function updateProgressBar(emotion, emotionName, progressId) {
+    const percentage = (emotion * 100).toFixed(0);
+    const progress = document.getElementById(progressId);
+    const progressSpan = progress.querySelector('.progress-bar-fill');
+    const progressPercentage = progress.querySelector('.progress-bar-percentage');
+    progressSpan.style.width = `${percentage}%`;
+    progressPercentage.innerText = `${emotionName} - ${percentage}%`;
 }
 
-function initializeCanvas() {
-    let [w, h] = [video.videoWidth, video.videoHeight];
-    canvas.width = w;
-    canvas.height = h;
-    canvasEmotion.width = w;
-    canvasEmotion.height = h;
-}
+//#endregion
+
+//#region variables and init
 
 document.querySelector('#showVideo').addEventListener('click', e => {
     init(e);
 
     setTimeout(() => {
-        initializeCanvas();
-        getEmotions();
+        initializeCanvasVideo();
+        initRealTimeVideoComponents();
+
+        const image = getImageBase64FromVideo();
+        getEmotions(image);
     }, (1000 * 3));
+});
+
+const fileInput = document.getElementById('fileInput');
+
+// Define um evento para ser acionado quando o arquivo é selecionado
+fileInput.addEventListener('change', function() {
+    const selectedFile = fileInput.files[0]; // Obtém o arquivo selecionado
+
+    if (selectedFile) {
+        getImageBase64FromFile(selectedFile, (imageBase64) => {
+            const imageBase64WithoutMimetype = imageBase64.split(',')[1];
+            getEmotions(imageBase64WithoutMimetype);
+
+            image.style.display = 'block';
+            image.src = imageBase64;
+
+            image.onload = function() {
+                const w = image.width;
+                const h = image.height;
+
+                initializeCanvasEmotion(w, h);
+            };
+        })
+    }
 });
 
 let canvas = document.createElement("canvas");
@@ -162,5 +208,8 @@ let context = canvas.getContext("2d");
 const canvasEmotion = document.getElementById("canvas-emotion");
 const contextEmotion = canvasEmotion.getContext("2d");
 
-const video = document.getElementById("gum-local")
+const video = document.getElementById("gum-local");
+const image = document.getElementById("image-emotion");
 const label = document.getElementById('emotion');
+
+//#endregion
