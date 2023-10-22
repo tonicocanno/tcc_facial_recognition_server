@@ -11,4 +11,4 @@ This server is basically an web application to process a facial recognition and 
  `pip install -r .\requirements.txt`
 
 ### Run application
-`flask --app .\index.py`
+`flask --app .\index.py run`

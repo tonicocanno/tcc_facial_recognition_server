@@ -1,11 +1,4 @@
 <!DOCTYPE html>
-<!--
- *  Copyright (c) 2015 The WebRTC project authors. All Rights Reserved.
- *
- *  Use of this source code is governed by a BSD-style license
- *  that can be found in the LICENSE file in the root of the source
- *  tree.
--->
 <html>
 <head>
 
@@ -20,176 +13,71 @@
 
     <base target="_blank">
 
-    <title>getUserMedia</title>
+    <title>emotion recognition</title>
 
     <link rel="icon" sizes="192x192" href="../../../images/webrtc-icon-192x192.png">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="../../../css/main.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 
 </head>
 
 <body>
 
 <div id="container">
+  <div class="container-emotion">
     <video id="gum-local" autoplay playsinline></video>
     <canvas id="canvas-emotion"></canvas>
+
+    <div class="wrapper">
+			<div class="progress-bar">
+				<span id="progress-bar-angry" class="progress-bar-fill">Raiva - 0%</span>
+			</div>
+		</div>
+
+    <div class="wrapper">
+			<div class="progress-bar">
+				<span id="progress-bar-disgust" class="progress-bar-fill">Nojo - 0%</span>
+			</div>
+		</div>
+
+    <div class="wrapper">
+			<div class="progress-bar">
+				<span id="progress-bar-fear" class="progress-bar-fill">Medo - 0%</span>
+			</div>
+		</div>
+
+    <div class="wrapper">
+			<div class="progress-bar">
+				<span id="progress-bar-happy" class="progress-bar-fill">Feliz - 0%</span>
+			</div>
+		</div>
+
+    <div class="wrapper">
+			<div class="progress-bar">
+				<span id="progress-bar-sad" class="progress-bar-fill">Triste - 0%</span>
+			</div>
+		</div>
+
+    <div class="wrapper">
+			<div class="progress-bar">
+				<span id="progress-bar-surprise" class="progress-bar-fill">Surpreso - 0%</span>
+			</div>
+		</div>
+
+    <div class="wrapper">
+			<div class="progress-bar">
+				<span id="progress-bar-neutral" class="progress-bar-fill">Neutro - 0%</span>
+			</div>
+		</div>
+    
+  </div>
+
+    <h3 id="emotion"></h3>
+    <button id="showVideo">Open camera</button>
 </div>
 
-<h1 id="emotion"></h1>
-<button id="showVideo">Open camera</button>
-
 <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-
-<script>
-    /*
- *  Copyright (c) 2015 The WebRTC project authors. All Rights Reserved.
- *
- *  Use of this source code is governed by a BSD-style license
- *  that can be found in the LICENSE file in the root of the source
- *  tree.
- */
-'use strict';
-
-// Put variables in global scope to make them available to the browser console.
-const constraints = window.constraints = {
-  audio: false,
-  video: true
-};
-
-function handleSuccess(stream) {
-  const video = document.querySelector('video');
-  const videoTracks = stream.getVideoTracks();
-  console.log('Got stream with constraints:', constraints);
-  console.log(`Using video device: ${videoTracks[0].label}`);
-  window.stream = stream; // make variable available to browser console
-  video.srcObject = stream;
-}
-
-function handleError(error) {
-  if (error.name === 'OverconstrainedError') {
-    const v = constraints.video;
-    errorMsg(`The resolution ${v.width.exact}x${v.height.exact} px is not supported by your device.`);
-  } else if (error.name === 'NotAllowedError') {
-    errorMsg('Permissions have not been granted to use your camera and ' +
-      'microphone, you need to allow the page access to your devices in ' +
-      'order for the demo to work.');
-  }
-  errorMsg(`getUserMedia error: ${error.name}`, error);
-}
-
-function errorMsg(msg, error) {
-  const errorElement = document.querySelector('#errorMsg');
-  errorElement.innerHTML += `<p>${msg}</p>`;
-  if (typeof error !== 'undefined') {
-    console.error(error);
-  }
-}
-
-async function init(e) {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia(constraints);
-    handleSuccess(stream);
-    e.target.disabled = true;
-  } catch (e) {
-    handleError(e);
-  }
-}
-
-function getImageBase64() {
-  context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-  let base64ImageData = canvas.toDataURL();
-  return base64ImageData.split(',')[1];
-}
-
-function getEmotions() {
-    const image = getImageBase64();
-
-    const request = new Request("/face", {
-      method: "POST",
-      body: JSON.stringify({ base64: image }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-  
-    fetch(request)
-    .then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      } else {
-        throw new Error("Something went wrong on API server!");
-      }
-    })
-    .then((response) => {
-      console.debug(response);
-      contextEmotion.reset();
-      
-      if(response.label) {
-        label.innerText = response.label + ' (' + (response.emotion_probability * 100).toFixed(2) + '% )';
-      
-        if(response.faces.length) {
-          contextEmotion.strokeStyle = "#008000";
-          const faces = response.faces[0];
-          
-          contextEmotion.beginPath();
-          contextEmotion.rect(faces[0], faces[1], faces[2], faces[3]);
-          contextEmotion.stroke();
-        }
-      }
-      else
-      label.innerText = 'Sem emoção detectada.'
-
-    })
-    .catch((error) => {
-      console.error(error);
-      label.innerText = 'Ocorreu um erro ao detectar a emoção';
-    })
-    .then(() => {
-      getEmotions();
-    });
-}
-
-function initializeCanvas() {
-  let [w, h] = [video.videoWidth, video.videoHeight];
-  canvas.width = w;
-  canvas.height = h;
-  canvasEmotion.width = w;
-  canvasEmotion.height = h;
-}
-
-document.querySelector('#showVideo').addEventListener('click', e => {
-  init(e);
-
-  setTimeout(() => {
-    initializeCanvas();
-    getEmotions();
-  }, (1000 * 3));
-});
-
-let canvas = document.createElement("canvas");
-let context = canvas.getContext("2d");
-
-const canvasEmotion = document.getElementById("canvas-emotion");
-const contextEmotion = canvasEmotion.getContext("2d");
-
-const video = document.getElementById("gum-local")
-const label = document.getElementById('emotion');
-
-</script>
-
-<style>
-
-  #canvas-emotion {
-    position: absolute;
-    left: 0;
-    top: 0;
-  }
-
-  #container {
-    position: relative;
-  }
-
-</style>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 </html>
