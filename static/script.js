@@ -162,6 +162,17 @@ function updateProgressBar(emotion, emotionName, progressId) {
     progressPercentage.innerText = `${emotionName} - ${percentage}%`;
 }
 
+function type() {
+    typingText.textContent += title[typingTextIndex];
+    typingTextIndex++;
+
+    if (typingTextIndex < title.length) {
+        setTimeout(type, 100);
+    } else {
+        typingText.style.border = 'none';
+    }
+}
+
 //#endregion
 
 //#region variables and init
@@ -211,5 +222,10 @@ const contextEmotion = canvasEmotion.getContext("2d");
 const video = document.getElementById("gum-local");
 const image = document.getElementById("image-emotion");
 const label = document.getElementById('emotion');
+const typingText = document.querySelector('.typing-text');
+
+let typingTextIndex = 0;
+const title = "Reconhecimento de emoções";
+type();
 
 //#endregion

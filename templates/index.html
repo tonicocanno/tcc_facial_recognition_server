@@ -23,70 +23,89 @@
 
 <body>
 
-<div id="container">
-  <div class="container-emotion">
-    <video id="gum-local" autoplay playsinline></video>
-    <img id="image-emotion">
-    <canvas id="canvas-emotion"></canvas>
-
-<div class="progress-bar-container">
-    <div class="wrapper">
-			<div id="progress-bar-angry" class="progress-bar">
-				<span class="progress-bar-percentage">Raiva - 0%</span>
-        <span class="progress-bar-fill"></span>
-			</div>
-		</div>
-
-    <div class="wrapper">
-			<div id="progress-bar-disgust" class="progress-bar">
-				<span class="progress-bar-percentage">Nojo - 0%</span>
-        <span class="progress-bar-fill"></span>
-			</div>
-		</div>
-
-    <div class="wrapper">
-			<div id="progress-bar-fear" class="progress-bar">
-				<span class="progress-bar-percentage">Medo - 0%</span>
-        <span class="progress-bar-fill"></span>
-			</div>
-		</div>
-
-    <div class="wrapper">
-			<div id="progress-bar-happy" class="progress-bar">
-				<span class="progress-bar-percentage">Feliz - 0%</span>
-        <span class="progress-bar-fill"></span>
-			</div>
-		</div>
-
-    <div class="wrapper">
-			<div id="progress-bar-sad" class="progress-bar">
-				<span class="progress-bar-percentage">Triste - 0%</span>
-        <span class="progress-bar-fill"></span>
-			</div>
-		</div>
-
-    <div class="wrapper">
-			<div id="progress-bar-surprise" class="progress-bar">
-				<span class="progress-bar-percentage">Surpreso - 0%</span>
-        <span class="progress-bar-fill"></span>
-			</div>
-		</div>
-
-    <div class="wrapper">
-			<div id="progress-bar-neutral" class="progress-bar">
-				<span class="progress-bar-percentage">Neutro - 0%</span>
-        <span class="progress-bar-fill"></span>
-			</div>
-		</div>
+  <div id="home">
+    <img id="logo" src="{{ url_for('static', filename='images/logo.png') }}">
+    <div class="typing-container">
+      <h1 class="typing-text"></h1>
   </div>
+
+    <div class="home--buttons">
+      <button class="futuristic-button" id="showVideo">Reconhecimento em tempo real</button>
+
+      <input id="fileInput" type="file" accept="image/*">
+      <label for="fileInput" class="futuristic-button">Reconhecimento de uma Imagem</label>
+    </div>
+
+  </div>
+
+  <div id="recognition">
+
+    <div id="container">
+      <div class="container-emotion">
+        <video id="gum-local" autoplay playsinline></video>
+        <img id="image-emotion">
+        <canvas id="canvas-emotion"></canvas>
+    
+    <div class="progress-bar-container">
+        <div class="wrapper">
+          <div id="progress-bar-angry" class="progress-bar">
+            <span class="progress-bar-percentage">Raiva - 0%</span>
+            <span class="progress-bar-fill"></span>
+          </div>
+        </div>
+    
+        <div class="wrapper">
+          <div id="progress-bar-disgust" class="progress-bar">
+            <span class="progress-bar-percentage">Nojo - 0%</span>
+            <span class="progress-bar-fill"></span>
+          </div>
+        </div>
+    
+        <div class="wrapper">
+          <div id="progress-bar-fear" class="progress-bar">
+            <span class="progress-bar-percentage">Medo - 0%</span>
+            <span class="progress-bar-fill"></span>
+          </div>
+        </div>
+    
+        <div class="wrapper">
+          <div id="progress-bar-happy" class="progress-bar">
+            <span class="progress-bar-percentage">Feliz - 0%</span>
+            <span class="progress-bar-fill"></span>
+          </div>
+        </div>
+    
+        <div class="wrapper">
+          <div id="progress-bar-sad" class="progress-bar">
+            <span class="progress-bar-percentage">Triste - 0%</span>
+            <span class="progress-bar-fill"></span>
+          </div>
+        </div>
+    
+        <div class="wrapper">
+          <div id="progress-bar-surprise" class="progress-bar">
+            <span class="progress-bar-percentage">Surpreso - 0%</span>
+            <span class="progress-bar-fill"></span>
+          </div>
+        </div>
+    
+        <div class="wrapper">
+          <div id="progress-bar-neutral" class="progress-bar">
+            <span class="progress-bar-percentage">Neutro - 0%</span>
+            <span class="progress-bar-fill"></span>
+          </div>
+        </div>
+      </div>
+        
+      </div>
+    
+        <h3 id="emotion"></h3>
+        <button id="showVideo">Open camera</button>
+    
+        <input type="file" id="fileInput">
+    </div>
     
   </div>
-
-    <h3 id="emotion"></h3>
-    <button id="showVideo">Open camera</button>
-
-    <input type="file" id="fileInput">
-</div>
 
 <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
 <script src="{{ url_for('static', filename='script.js') }}"></script>

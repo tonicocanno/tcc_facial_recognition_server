@@ -2,7 +2,78 @@
     font-family: Roboto;
 }
 
-h3 {
+body {
+    background-color: #131313;
+}
+
+#home {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 95vh;
+}
+
+#logo {
+    animation: fadeIn 2s;
+}
+
+.home--buttons {
+    display: flex;
+    gap: 1rem;
+}
+
+#home>h1 {
+    color: white;
+}
+
+.typing-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 0;
+}
+
+.typing-text {
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 2px solid #828282;
+    padding-right: 10px;
+    color: white;
+}
+
+#fileInput {
+    display: none;
+}
+
+.futuristic-button {
+    background-color: #00aaff;
+    /* Cor de fundo do botão */
+    color: #ffffff;
+    /* Cor do texto do botão */
+    border: none;
+    border-radius: 5px;
+    /* Borda arredondada */
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    /* Efeito de transição suave */
+}
+
+.futuristic-button:hover {
+    background-color: #0077cc;
+    /* Cor de fundo do botão ao passar o mouse */
+}
+
+#recognition {
+    display: none;
+}
+
+#recognition>h3 {
     display: none;
     color: white;
     border: 1px solid #ffffff4f;
@@ -29,10 +100,6 @@ video,
     width: 100%;
 }
 
-body {
-    background-color: #191b1c;
-}
-
 .progress-bar-container {
     display: none;
     opacity: 0;
@@ -51,30 +118,6 @@ body {
     position: absolute;
     text-align: center;
     width: 100%;
-}
-
-#showVideo {
-    align-items: center;
-    background-image: linear-gradient(144deg, #AF40FF, #5B42F3 50%, #00DDEB);
-    border: 0;
-    border-radius: 8px;
-    box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
-    box-sizing: border-box;
-    color: #FFFFFF;
-    display: flex;
-    font-family: Phantomsans, sans-serif;
-    font-size: 20px;
-    justify-content: center;
-    line-height: 1em;
-    max-width: 100%;
-    min-width: 140px;
-    padding: 19px 24px;
-    text-decoration: none;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    white-space: nowrap;
-    cursor: pointer;
 }
 
 button:active,
