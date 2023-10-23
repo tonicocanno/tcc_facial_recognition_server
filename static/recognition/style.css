@@ -1,0 +1,138 @@
+* {
+    font-family: Roboto;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #0b0b0b;
+    height: 100vh;
+}
+
+.typing-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem 0;
+}
+
+.typing-text {
+    white-space: nowrap;
+    overflow: hidden;
+    border-right: 2px solid #828282;
+    padding-right: 10px;
+    color: white;
+}
+
+#fileInput {
+    display: none;
+}
+
+.futuristic-button {
+    background-color: #00aaff;
+    /* Cor de fundo do botão */
+    color: #ffffff;
+    /* Cor do texto do botão */
+    border: none;
+    border-radius: 5px;
+    /* Borda arredondada */
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    /* Efeito de transição suave */
+}
+
+.futuristic-button:hover {
+    background-color: #0077cc;
+    /* Cor de fundo do botão ao passar o mouse */
+}
+
+#recognition>h3 {
+    display: none;
+    color: white;
+    border: 1px solid #ffffff4f;
+    padding: 1rem 10rem;
+    border-radius: 10px;
+    background-color: #232527;
+    animation: fadeIn 250ms;
+}
+
+#image-emotion {
+    display: none;
+    animation: fadeIn 1s;
+}
+
+#canvas-emotion {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+#container {
+    position: relative;
+    width: 100%;
+}
+
+.progress-bar-container {
+    display: none;
+    opacity: 0;
+    transition: 150ms;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+    animation: fadeIn 1s;
+}
+
+.wrapper {
+    position: relative;
+}
+
+.progress-bar-percentage {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+}
+
+button:active,
+button:hover {
+    outline: 0;
+}
+
+.wrapper {
+    width: 500px;
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: #1f2122;
+    padding: 3px;
+    border-radius: 3px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, .2);
+    color: white;
+    border: 1px solid #343739;
+}
+
+.progress-bar-fill {
+    display: block;
+    height: 22px;
+    width: 0%;
+    background-color: #5a5a5a;
+    border-radius: 3px;
+    transition: width 500ms ease-in-out;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        /* Inicia com opacidade zero (invisível) */
+    }
+    100% {
+        opacity: 1;
+        /* Termina com opacidade 1 (totalmente visível) */
+    }
+}

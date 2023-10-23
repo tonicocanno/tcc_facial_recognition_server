@@ -17,20 +17,20 @@
 
     <link rel="icon" sizes="192x192" href="../../../images/webrtc-icon-192x192.png">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home/style.css') }}">
 
 </head>
 
-<body>
+<body id="body">
 
   <div id="home">
     <img id="logo" src="{{ url_for('static', filename='images/logo.png') }}">
     <div class="typing-container">
       <h1 class="typing-text"></h1>
-  </div>
+    </div>
 
     <div class="home--buttons">
-      <button class="futuristic-button" id="showVideo">Reconhecimento em tempo real</button>
+      <button class="futuristic-button" onclick="goToRecognitionPage()" >Reconhecimento em tempo real</button>
 
       <input id="fileInput" type="file" accept="image/*">
       <label for="fileInput" class="futuristic-button">Reconhecimento de uma Imagem</label>
@@ -38,77 +38,27 @@
 
   </div>
 
-  <div id="recognition">
-
-    <div id="container">
-      <div class="container-emotion">
-        <video id="gum-local" autoplay playsinline></video>
-        <img id="image-emotion">
-        <canvas id="canvas-emotion"></canvas>
-    
-    <div class="progress-bar-container">
-        <div class="wrapper">
-          <div id="progress-bar-angry" class="progress-bar">
-            <span class="progress-bar-percentage">Raiva - 0%</span>
-            <span class="progress-bar-fill"></span>
-          </div>
-        </div>
-    
-        <div class="wrapper">
-          <div id="progress-bar-disgust" class="progress-bar">
-            <span class="progress-bar-percentage">Nojo - 0%</span>
-            <span class="progress-bar-fill"></span>
-          </div>
-        </div>
-    
-        <div class="wrapper">
-          <div id="progress-bar-fear" class="progress-bar">
-            <span class="progress-bar-percentage">Medo - 0%</span>
-            <span class="progress-bar-fill"></span>
-          </div>
-        </div>
-    
-        <div class="wrapper">
-          <div id="progress-bar-happy" class="progress-bar">
-            <span class="progress-bar-percentage">Feliz - 0%</span>
-            <span class="progress-bar-fill"></span>
-          </div>
-        </div>
-    
-        <div class="wrapper">
-          <div id="progress-bar-sad" class="progress-bar">
-            <span class="progress-bar-percentage">Triste - 0%</span>
-            <span class="progress-bar-fill"></span>
-          </div>
-        </div>
-    
-        <div class="wrapper">
-          <div id="progress-bar-surprise" class="progress-bar">
-            <span class="progress-bar-percentage">Surpreso - 0%</span>
-            <span class="progress-bar-fill"></span>
-          </div>
-        </div>
-    
-        <div class="wrapper">
-          <div id="progress-bar-neutral" class="progress-bar">
-            <span class="progress-bar-percentage">Neutro - 0%</span>
-            <span class="progress-bar-fill"></span>
-          </div>
-        </div>
-      </div>
-        
-      </div>
-    
-        <h3 id="emotion"></h3>
-        <button id="showVideo">Open camera</button>
-    
-        <input type="file" id="fileInput">
-    </div>
-    
-  </div>
-
 <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+<script src="{{ url_for('static', filename='home/script.js') }}"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+<script>
+VANTA.NET({
+  el: "#body",
+  mouseControls: true,
+  touchControls: true,
+  gyroControls: false,
+  minHeight: 200.00,
+  minWidth: 200.00,
+  scale: 1.00,
+  scaleMobile: 1.00,
+  color: 0x483fff,
+  backgroundColor: 0xb0b0b,
+  points: 14.00,
+  maxDistance: 21.00
+})
+</script>
 
 </body>
 </html>

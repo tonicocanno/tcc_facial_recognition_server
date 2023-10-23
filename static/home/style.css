@@ -1,9 +1,20 @@
 * {
     font-family: Roboto;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html {
+    background-color: #0b0b0b;
+}
+
+canvas {
+    animation: fadeIn 2s;
 }
 
 body {
-    background-color: #131313;
+    height: 100vh;
 }
 
 #home {
@@ -11,7 +22,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 95vh;
+    height: 100%;
 }
 
 #logo {
@@ -47,13 +58,10 @@ body {
 }
 
 .futuristic-button {
-    background-color: #00aaff;
-    /* Cor de fundo do botão */
+    background-color: #483fff;
     color: #ffffff;
-    /* Cor do texto do botão */
     border: none;
     border-radius: 5px;
-    /* Borda arredondada */
     padding: 10px 20px;
     font-size: 16px;
     text-align: center;
@@ -61,12 +69,10 @@ body {
     display: inline-block;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-    /* Efeito de transição suave */
 }
 
 .futuristic-button:hover {
-    background-color: #0077cc;
-    /* Cor de fundo do botão ao passar o mouse */
+    background-color: #625bfd;
 }
 
 #recognition {

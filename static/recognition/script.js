@@ -12,11 +12,10 @@ const constraints = window.constraints = {
 
 //#region Init functions
 
-async function init(e) {
+async function init() {
     try {
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
         handleSuccess(stream);
-        e.target.disabled = true;
     } catch (e) {
         handleError(e);
     }
@@ -95,9 +94,7 @@ function getImageBase64FromFile(file, callback) {
     return reader.readAsDataURL(file);
 }
 
-function getEmotions(image, repeat = false) {
-    initProgressBar();
-
+function getEmotions(image, repeat) {
     const request = new Request("/face", {
         method: "POST",
         body: JSON.stringify({ base64: image }),
@@ -149,7 +146,7 @@ function getEmotions(image, repeat = false) {
         })
         .then(() => {
             if (repeat)
-                getEmotions();
+                getEmotions(getImageBase64FromVideo(), repeat);
         });
 }
 
@@ -162,32 +159,21 @@ function updateProgressBar(emotion, emotionName, progressId) {
     progressPercentage.innerText = `${emotionName} - ${percentage}%`;
 }
 
-function type() {
-    typingText.textContent += title[typingTextIndex];
-    typingTextIndex++;
-
-    if (typingTextIndex < title.length) {
-        setTimeout(type, 100);
-    } else {
-        typingText.style.border = 'none';
-    }
-}
-
 //#endregion
 
 //#region variables and init
 
-document.querySelector('#showVideo').addEventListener('click', e => {
-    init(e);
+function initCamera() {
+    init();
+    initRealTimeVideoComponents();
+    initProgressBar();
 
     setTimeout(() => {
         initializeCanvasVideo();
-        initRealTimeVideoComponents();
-
         const image = getImageBase64FromVideo();
-        getEmotions(image);
+        getEmotions(image, true);
     }, (1000 * 3));
-});
+}
 
 const fileInput = document.getElementById('fileInput');
 
@@ -213,19 +199,16 @@ fileInput.addEventListener('change', function() {
     }
 });
 
+const video = document.getElementById("gum-local");
+const image = document.getElementById("image-emotion");
+const label = document.getElementById('emotion');
+initCamera();
+
 let canvas = document.createElement("canvas");
 let context = canvas.getContext("2d");
 
 const canvasEmotion = document.getElementById("canvas-emotion");
 const contextEmotion = canvasEmotion.getContext("2d");
 
-const video = document.getElementById("gum-local");
-const image = document.getElementById("image-emotion");
-const label = document.getElementById('emotion');
-const typingText = document.querySelector('.typing-text');
-
-let typingTextIndex = 0;
-const title = "Reconhecimento de emoções";
-type();
 
 //#endregion
