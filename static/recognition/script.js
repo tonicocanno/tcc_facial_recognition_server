@@ -28,12 +28,12 @@ function initRealTimeVideoComponents() {
 
 function initProgressBar() {
     const progressBarContainer = document.querySelector('.progress-bar-container');
-    progressBarContainer.style.display = 'block';
+    progressBarContainer.style.display = 'flex';
     progressBarContainer.style.opacity = 1;
 }
 
 function initializeCanvasVideo() {
-    let [w, h] = [video.videoWidth, video.videoHeight];
+    let [w, h] = [video.offsetWidth, video.offsetHeight];
     canvas.width = w;
     canvas.height = h;
     initializeCanvasEmotion(w, h);
@@ -167,12 +167,6 @@ function initCamera() {
     init();
     initRealTimeVideoComponents();
     initProgressBar();
-
-    setTimeout(() => {
-        initializeCanvasVideo();
-        const image = getImageBase64FromVideo();
-        getEmotions(image, true);
-    }, (1000 * 3));
 }
 
 const fileInput = document.getElementById('fileInput');
@@ -200,6 +194,14 @@ fileInput.addEventListener('change', function() {
 });
 
 const video = document.getElementById("gum-local");
+
+video.addEventListener('loadedmetadata', () => {
+    initializeCanvasVideo();
+    const image = getImageBase64FromVideo();
+    getEmotions(image, true);
+})
+
+
 const image = document.getElementById("image-emotion");
 const label = document.getElementById('emotion');
 initCamera();
@@ -209,6 +211,5 @@ let context = canvas.getContext("2d");
 
 const canvasEmotion = document.getElementById("canvas-emotion");
 const contextEmotion = canvasEmotion.getContext("2d");
-
 
 //#endregion

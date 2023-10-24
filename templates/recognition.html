@@ -25,11 +25,17 @@
 
     <div id="recognition">
 
-        <div id="container">
-          <div class="container-emotion">
-            <video id="gum-local" autoplay playsinline></video>
-            <img id="image-emotion">
-            <canvas id="canvas-emotion"></canvas>
+      <div id="container">
+        <div class="container-emotion">
+          <div class="container-emotion-card">
+            <div id="video-emotion">
+              <video id="gum-local" autoplay playsinline></video>
+              <canvas id="canvas-emotion"></canvas>
+            </div>
+
+            <h3 id="emotion" class="progress-bar"></h3>
+          </div>
+        </div>
         
         <div class="progress-bar-container">
             <div class="wrapper">
@@ -84,11 +90,8 @@
             
           </div>
         
-            <h3 id="emotion"></h3>
             <input type="file" id="fileInput">
         </div>
-        
-      </div>
 
       <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
       <script src="{{ url_for('static', filename='recognition/script.js') }}"></script>
