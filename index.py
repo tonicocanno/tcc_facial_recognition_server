@@ -93,6 +93,10 @@ def getEmotion():
 def getIndex():
     return render_template("index.html")
 
-@app.get("/recognition")
-def getRecognition():
-    return render_template("recognition.html")
+@app.get("/recognition/realtime")
+def getRecognitionRealtime():
+    return render_template("recognition-realtime.html")
+
+@app.get("/recognition/image")
+def getRecognitionImage():
+    return render_template("recognition-image.html")

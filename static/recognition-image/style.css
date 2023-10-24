@@ -5,41 +5,119 @@
     box-sizing: border-box;
 }
 
-*> {
-    animation: fadeIn 1s;
+#recognition>* {
+    animation: fadeIn 250ms ease-in-out;
 }
 
-html {
-    background-color: #0b0b0b;
-}
-
-canvas {
+.vanta-canvas {
     animation: fadeIn 2s;
 }
 
+#logo {
+    z-index: 2;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 5rem;
+    filter: opacity(0.7);
+    cursor: pointer;
+    transition: 125ms ease-in-out;
+}
+
+#logo:hover {
+    filter: opacity(1);
+}
+
 body {
+    background-color: #0b0b0b;
     height: 100vh;
 }
 
-#home {
+.container-emotion {
+    width: 50vw;
+    margin-left: 6rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container-emotion-card {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    height: 94vh;
+    margin: auto;
+    padding: 0 2rem;
+    position: relative;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(2.2px);
+    -webkit-backdrop-filter: blur(2.2px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-#logo {
-    animation: fadeIn 2s;
-}
-
-.home--buttons {
+#video-emotion {
     display: flex;
-    gap: 1rem;
+    align-items: center;
+    justify-content: center;
 }
 
-#home>h1 {
-    color: white;
+video {
+    max-height: 30rem;
+}
+
+#canvas-emotion {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.file-input-label {
+    color: grey;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 125ms;
+}
+
+.file-input-label:hover {
+    color: #483fff;
+}
+
+#image {
+    max-width: 47rem;
+}
+
+.droparea {
+    margin: 1rem auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    max-width: 100%;
+    height: 30rem;
+    font-size: large;
+    border: 4px dashed grey;
+    color: grey;
+    border-radius: 15px;
+}
+
+.droparea-description {
+    display: flex;
+}
+
+.green-border {
+    border-color: #483fff;
+}
+
+#emotion {
+    display: block;
+    width: 40rem;
+    text-align: center;
+    margin-top: 2rem;
 }
 
 .typing-container {
@@ -62,7 +140,7 @@ body {
 }
 
 .futuristic-button {
-    background-color: #483fff;
+    background-color: #00aaff;
     color: #ffffff;
     border: none;
     border-radius: 5px;
@@ -76,11 +154,7 @@ body {
 }
 
 .futuristic-button:hover {
-    background-color: #625bfd;
-}
-
-#recognition {
-    display: none;
+    background-color: #0077cc;
 }
 
 #recognition>h3 {
@@ -93,30 +167,29 @@ body {
     animation: fadeIn 250ms;
 }
 
-video,
 #image-emotion {
     display: none;
     animation: fadeIn 1s;
 }
 
-#canvas-emotion {
-    position: absolute;
-    left: 0;
-    top: 0;
-}
-
 #container {
     position: relative;
     width: 100%;
+    height: 100vh;
+    display: flex;
+}
+
+#image-emotion-container {
+    position: relative;
 }
 
 .progress-bar-container {
-    display: none;
-    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
     transition: 150ms;
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
     animation: fadeIn 1s;
 }
 

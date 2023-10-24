@@ -16,14 +16,14 @@ function type() {
     typingTextIndex++;
 
     if (typingTextIndex < title.length) {
-        setTimeout(type, 100);
+        setTimeout(type, 50);
     } else {
         typingText.style.border = 'none';
     }
 }
 
-function goToRecognitionPage() {
-    window.location.href = "/recognition";
+function goToRecognitionPage(suffix) {
+    window.location.href = `/recognition/${ suffix }`;
 }
 
 //#endregion

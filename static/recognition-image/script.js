@@ -12,31 +12,10 @@ const constraints = window.constraints = {
 
 //#region Init functions
 
-async function init() {
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        handleSuccess(stream);
-    } catch (e) {
-        handleError(e);
-    }
-}
-
-function initRealTimeVideoComponents() {
-    label.style.display = 'block';
-    label.innerText = 'Carregando...';
-}
-
 function initProgressBar() {
     const progressBarContainer = document.querySelector('.progress-bar-container');
     progressBarContainer.style.display = 'flex';
     progressBarContainer.style.opacity = 1;
-}
-
-function initializeCanvasVideo() {
-    let [w, h] = [video.offsetWidth, video.offsetHeight];
-    canvas.width = w;
-    canvas.height = h;
-    initializeCanvasEmotion(w, h);
 }
 
 function initializeCanvasEmotion(width, height) {
@@ -47,41 +26,6 @@ function initializeCanvasEmotion(width, height) {
 //#endregion
 
 //#region general functions
-
-function handleSuccess(stream) {
-    const video = document.querySelector('video');
-    const videoTracks = stream.getVideoTracks();
-    console.log('Got stream with constraints:', constraints);
-    console.log(`Using video device: ${videoTracks[0].label}`);
-    window.stream = stream; // make variable available to browser console
-    video.srcObject = stream;
-}
-
-function handleError(error) {
-    if (error.name === 'OverconstrainedError') {
-        const v = constraints.video;
-        errorMsg(`The resolution ${v.width.exact}x${v.height.exact} px is not supported by your device.`);
-    } else if (error.name === 'NotAllowedError') {
-        errorMsg('Permissions have not been granted to use your camera and ' +
-            'microphone, you need to allow the page access to your devices in ' +
-            'order for the demo to work.');
-    }
-    errorMsg(`getUserMedia error: ${error.name}`, error);
-}
-
-function errorMsg(msg, error) {
-    const errorElement = document.querySelector('#errorMsg');
-    errorElement.innerHTML += `<p>${msg}</p>`;
-    if (typeof error !== 'undefined') {
-        console.error(error);
-    }
-}
-
-function getImageBase64FromVideo() {
-    context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-    let base64ImageData = canvas.toDataURL();
-    return base64ImageData.split(',')[1];
-}
 
 function getImageBase64FromFile(file, callback) {
     const reader = new FileReader();
@@ -94,7 +38,7 @@ function getImageBase64FromFile(file, callback) {
     return reader.readAsDataURL(file);
 }
 
-function getEmotions(image, repeat) {
+function getEmotions(image) {
     const request = new Request("/face", {
         method: "POST",
         body: JSON.stringify({ base64: image }),
@@ -138,15 +82,10 @@ function getEmotions(image, repeat) {
                 }
             } else
                 label.innerText = 'Sem emoção detectada.'
-
         })
         .catch((error) => {
             console.error(error);
             label.innerText = 'Ocorreu um erro ao detectar a emoção';
-        })
-        .then(() => {
-            if (repeat)
-                getEmotions(getImageBase64FromVideo(), repeat);
         });
 }
 
@@ -159,15 +98,32 @@ function updateProgressBar(emotion, emotionName, progressId) {
     progressPercentage.innerText = `${emotionName} - ${percentage}%`;
 }
 
+function loadedImage(selectedFile) {
+    canvas = document.createElement("canvas");
+    context = canvas.getContext("2d");
+    canvasEmotion = document.getElementById("canvas-emotion");
+    contextEmotion = canvasEmotion.getContext("2d");
+
+    getImageBase64FromFile(selectedFile, (imageBase64) => {
+        const imageBase64WithoutMimetype = imageBase64.split(',')[1];
+
+        image.style.display = 'block';
+        image.src = imageBase64;
+        dropFile.style.display = 'none';
+
+        image.onload = function() {
+            const w = image.offsetWidth;
+            const h = image.offsetHeight;
+
+            initializeCanvasEmotion(w, h);
+            getEmotions(imageBase64WithoutMimetype);
+        };
+    })
+}
+
 //#endregion
 
 //#region variables and init
-
-function initCamera() {
-    init();
-    initRealTimeVideoComponents();
-    initProgressBar();
-}
 
 const fileInput = document.getElementById('fileInput');
 
@@ -176,40 +132,52 @@ fileInput.addEventListener('change', function() {
     const selectedFile = fileInput.files[0]; // Obtém o arquivo selecionado
 
     if (selectedFile) {
-        getImageBase64FromFile(selectedFile, (imageBase64) => {
-            const imageBase64WithoutMimetype = imageBase64.split(',')[1];
-            getEmotions(imageBase64WithoutMimetype);
-
-            image.style.display = 'block';
-            image.src = imageBase64;
-
-            image.onload = function() {
-                const w = image.width;
-                const h = image.height;
-
-                initializeCanvasEmotion(w, h);
-            };
-        })
+        loadedImage(selectedFile);
     }
 });
 
-const video = document.getElementById("gum-local");
+let canvas;
+let context;
+let canvasEmotion;
+let contextEmotion;
 
-video.addEventListener('loadedmetadata', () => {
-    initializeCanvasVideo();
-    const image = getImageBase64FromVideo();
-    getEmotions(image, true);
-})
-
-
-const image = document.getElementById("image-emotion");
 const label = document.getElementById('emotion');
-initCamera();
 
-let canvas = document.createElement("canvas");
-let context = canvas.getContext("2d");
+const image = document.getElementById("image");
 
-const canvasEmotion = document.getElementById("canvas-emotion");
-const contextEmotion = canvasEmotion.getContext("2d");
+const dropFile = document.getElementById("dropfile");
+
+const initApp = () => {
+    const droparea = document.querySelector('.droparea');
+
+    const active = () => droparea.classList.add("green-border");
+
+    const inactive = () => droparea.classList.remove("green-border");
+
+    const prevents = (e) => e.preventDefault();
+
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(evtName => {
+        droparea.addEventListener(evtName, prevents);
+    });
+
+    ['dragenter', 'dragover'].forEach(evtName => {
+        droparea.addEventListener(evtName, active);
+    });
+
+    ['dragleave', 'drop'].forEach(evtName => {
+        droparea.addEventListener(evtName, inactive);
+    });
+
+    droparea.addEventListener("drop", handleDrop);
+
+}
+
+document.addEventListener("DOMContentLoaded", initApp);
+
+const handleDrop = (e) => {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    loadedImage(files[0])
+}
 
 //#endregion
