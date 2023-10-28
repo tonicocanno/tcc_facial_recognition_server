@@ -33,10 +33,10 @@
             <section id="dropfile" class="droparea">
               <div class="droparea-description">
                 <input id="fileInput" type="file" accept="image/*">
-                <label for="fileInput" class="file-input-label">Choose a file</label>
-                <p>&nbsp;or drag it here.</p>
+                <label for="fileInput" class="file-input-label">Escolha um arquivo</label>
+                <p>&nbsp;ou arraste aqui.</p>
               </div>
-              <p><small>No max file size.</small></p>
+              <p><small>Sem limite de tamanho.</small></p>
           </section>
 
           <div id="image-emotion-container">
@@ -104,10 +104,9 @@
             <input type="file" id="fileInput">
         </div>
 
-      <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
       <script src="{{ url_for('static', filename='recognition-image/script.js') }}"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+      <script src="{{ url_for('static', filename='libs/vantajs/three.min.js') }}"></script>
+      <script src="{{ url_for('static', filename='libs/vantajs/vanta.net.min.js') }}"></script>
     <script>
         VANTA.NET({
         el: "#body",

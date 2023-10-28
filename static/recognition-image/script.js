@@ -47,6 +47,9 @@ function getEmotions(image) {
         }
     });
 
+    document.getElementById('emotion').style.opacity = 1;
+    label.innerText = 'Detectando emoção...';
+
     fetch(request)
         .then((response) => {
             if (response.status === 200) {
@@ -90,7 +93,7 @@ function getEmotions(image) {
 }
 
 function updateProgressBar(emotion, emotionName, progressId) {
-    const percentage = (emotion * 100).toFixed(0);
+    const percentage = (emotion * 100).toFixed(2);
     const progress = document.getElementById(progressId);
     const progressSpan = progress.querySelector('.progress-bar-fill');
     const progressPercentage = progress.querySelector('.progress-bar-percentage');
@@ -112,8 +115,8 @@ function loadedImage(selectedFile) {
         dropFile.style.display = 'none';
 
         image.onload = function() {
-            const w = image.offsetWidth;
-            const h = image.offsetHeight;
+            const w = image.naturalWidth;
+            const h = image.naturalHeight;
 
             initializeCanvasEmotion(w, h);
             getEmotions(imageBase64WithoutMimetype);

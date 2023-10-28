@@ -83,17 +83,6 @@ function getImageBase64FromVideo() {
     return base64ImageData.split(',')[1];
 }
 
-function getImageBase64FromFile(file, callback) {
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-        const base64String = e.target.result;
-        callback(base64String);
-    };
-
-    return reader.readAsDataURL(file);
-}
-
 function getEmotions(image, repeat) {
     const request = new Request("/face", {
         method: "POST",

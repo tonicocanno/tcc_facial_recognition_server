@@ -22,10 +22,6 @@ function type() {
     }
 }
 
-function goToRecognitionPage(suffix) {
-    window.location.href = `/recognition/${ suffix }`;
-}
-
 //#endregion
 
 //#region variables and init

@@ -65,10 +65,6 @@ body {
     justify-content: center;
 }
 
-video {
-    max-height: 30rem;
-}
-
 #canvas-emotion {
     position: absolute;
     left: 0;
@@ -86,7 +82,8 @@ video {
     color: #483fff;
 }
 
-#image {
+#image,
+#canvas-emotion {
     max-width: 47rem;
 }
 
@@ -114,7 +111,8 @@ video {
 }
 
 #emotion {
-    display: block;
+    opacity: 0;
+    transition: 125ms;
     width: 40rem;
     text-align: center;
     margin-top: 2rem;
