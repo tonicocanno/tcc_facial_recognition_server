@@ -85,6 +85,18 @@ body {
 #image,
 #canvas-emotion {
     max-width: 47rem;
+    max-height: 32rem;
+    cursor: pointer;
+}
+
+#canvas-emotion {
+    margin-top: 1.675rem;
+}
+
+#click-to-remove {
+    display: none;
+    text-align: center;
+    height: 1.675rem;
 }
 
 .droparea {

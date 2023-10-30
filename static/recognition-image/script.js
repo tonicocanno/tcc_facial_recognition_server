@@ -101,6 +101,29 @@ function updateProgressBar(emotion, emotionName, progressId) {
     progressPercentage.innerText = `${emotionName} - ${percentage}%`;
 }
 
+function resetImage() {
+    image.style.display = 'none';
+    image.src = '';
+    dropFile.style.display = 'flex';
+    clickToRemoveLabel.style.display = 'none';
+    label.style.opacity = 0;
+
+    canvasEmotion = document.getElementById("canvas-emotion");
+    canvasEmotion.height = 0;
+    canvasEmotion.width = 0;
+
+    contextEmotion = canvasEmotion.getContext("2d");
+    contextEmotion.reset();
+
+    updateProgressBar(0, 'Raiva', 'progress-bar-angry');
+    updateProgressBar(0, 'Nojo', 'progress-bar-disgust');
+    updateProgressBar(0, 'Medo', 'progress-bar-fear');
+    updateProgressBar(0, 'Feliz', 'progress-bar-happy');
+    updateProgressBar(0, 'Triste', 'progress-bar-sad');
+    updateProgressBar(0, 'Surpreso', 'progress-bar-surprise');
+    updateProgressBar(0, 'Neutro', 'progress-bar-neutral');
+}
+
 function loadedImage(selectedFile) {
     canvas = document.createElement("canvas");
     context = canvas.getContext("2d");
@@ -110,6 +133,7 @@ function loadedImage(selectedFile) {
     getImageBase64FromFile(selectedFile, (imageBase64) => {
         const imageBase64WithoutMimetype = imageBase64.split(',')[1];
 
+        clickToRemoveLabel.style.display = 'block';
         image.style.display = 'block';
         image.src = imageBase64;
         dropFile.style.display = 'none';
@@ -145,10 +169,9 @@ let canvasEmotion;
 let contextEmotion;
 
 const label = document.getElementById('emotion');
-
 const image = document.getElementById("image");
-
 const dropFile = document.getElementById("dropfile");
+const clickToRemoveLabel = document.getElementById("click-to-remove");
 
 const initApp = () => {
     const droparea = document.querySelector('.droparea');
